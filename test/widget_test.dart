@@ -1,30 +1,36 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:posts_web_app/main.dart';
+import 'package:posts_web_app/models/post_model.dart';
+import 'package:posts_web_app/widgets/post_card.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('PostCard отображается', (WidgetTester tester) async {
+    final post = PostModel(
+      id: '1',
+      title: 'Тестовый пост',
+      text: 'Текст поста',
+      authorUid: 'user_1',
+      authorEmail: 'test@gmail.com',
+      createdAt: DateTime(2026, 4, 9, 0, 15),
+      imageUrl: null,
+    );
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: SizedBox(
+            width: 360,
+            child: PostCard(
+              post: post,
+              canManage: true,
+            ),
+          ),
+        ),
+      ),
+    );
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(find.text('Тестовый пост'), findsOneWidget);
+    expect(find.text('test@gmail.com'), findsOneWidget);
   });
 }
